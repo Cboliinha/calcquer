@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Consumo de Energia</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    footer li {
+      display: inline-block;
+      padding-left: 12px;
+    }
+
+    #aboutText p {
+      text-align: justify;
+    }
+
+    .removeButton {
+      background-color: Transparent;
+      background-repeat: no-repeat;
+      border: none;
+      color: red;
+    }
+
+    #githubIcon {
+      width: 22px;
+      height: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+    <div class="container-fluid">
+
+      <div class="container" style="margin-top: 150px;">
+        <header class="masthead mb-auto" style="background-color: white;">
+          <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#results">Resultados</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#about">Sobre</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </header>
+      </div>
+
+      <div class="container" style="margin-top: 80px; margin-bottom: 250px;">
+        <div style="padding-bottom: 16px;">
+          <h1>Calcule seu consumo de eletrecidade!</h1>
+        </div>
+
+        <form class="main-form needs-validation" novalidate>
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label>Nome</label>
+              <input id="inputDeviceName" type="text" class="form-control" value="" placeholder="Ex: Geladeira">
+            </div>
+            <div class="form-group col-md-2">
+              <label>Quantidade</label>
+              <input id="inputAmountDevices" type="number" min="1" class="form-control" value="">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label>Potência Elétrica</label>
+              <input type="range" class="form-control-range" id="inputPowerEletric" value="50" min="1" max="100"
+                step="0.5" oninput="displayRange.value=value" onchange="displayRange.value=value">
+              
+              
+                <input type="number" class="form-control form-control-sm" id="displayRange" min="1"
+                  style=" text-align: center; width: 100px;" onchange="inputPowerEletric.value=value"></input>
+                
+                
+                
+            </div>
+            <div class="form-group col-md-2">
+              <br>
+              <select id="cbPowerEletricScale" class="form-control" onmousedown="this.value='';">
+                <option selected>Watts</option>
+                <option>Kilo Watts</option>
+                <option>Mega Watts</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-2" style="padding-right: 0px;">
+              <label>Uso médio por dia</label>
+              <input id="inputUseDuration" type="number" min="1" class="form-control">
+            </div>
+
+            <div class="form-group col-md-2" style="padding-left: 0px;">
+
+              <select id="cbTimeUseType" style="margin-top: 32px; " class="form-control" onmousedown="this.value='';">
+                <option selected>Horas</option>
+                <option>Minutos</option>~
+                <option>Segundos</option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label>Período de Consumo</label>
+              <div class="input-group">
+                <input id="inputPeriod" type="number" min="1" class="form-control">
+                <div class="input-group-append">
+                  <span class="input-group-text">Dias</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Empresa de Energia</label>
+              <select id="cbPowerSupply" class="form-control" onmousedown="this.value='';">
+                <option disabled selected style=" display: none;"></option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <div class="row">
+          <div class="col-md-3">
+            <button id="submitButton" class="btn btn-primary" onclick="calculate()">Calcular</button>
+          </div>
+          <div class="col-md-3">
+            <!-- <h2 class="text-center" id="resultText">teste</h2> -->
+            <h2 class="text-center" id="resultText" style="display: none;"></h2>
+          </div>
+        </div>
+
+        <!-- <hr> -->
+      </div>
+    </div> <!-- calculator -->
+
+
+
+    <section id="results">
+      <div class="container" style="margin-top: 100px;height: 800px">
+        <div>
+          <!-- <h2 class="text-center" id=""></h2> -->
+          <h2 style="padding-bottom: 8px;">Resultados</h2>
+
+        </div>
+        <table class=" table table-striped" id="resultTable">
+          <!-- style=" display: none " -->
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nome</th>
+              <th>Quantidade</th>
+              <th>Uso médio por dia</th>
+              <th>Consumo Elétrico</th>
+              <th>Período de Uso</th>
+              <th>Fornecedora</th>
+              <th>Custo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </section><!-- results -->
+
+
+    <br>
+    <section id="about">
+      <div class="container" style="margin-top: 100px;margin-bottom: 120px">
+        <h2>Sobre</h2>
+        <div id="aboutText">
+          <div>
+            <h4>Consumo de Energia Elétrica</h4>
+            <p>
+              Na realidade moderna a energia elétrica é um dos consumos mais universais para a população, porém ainda
+              assim a maioria dos consumidores não conhecem o sistema de cobrança das empresas que oferecem esse
+              serviço.
+              Conhecimento a respeito do funcionamento dos variantes para cálculo do valor de energia é necessário para
+              que seja aplicado um consumo consciente e econômico do recurso, então afinal como ocorre o processo?
+            </p>
+            <p>
+              A potência elétrica é uma das grandezas aplicadas no processo, esta expressa numericamente a quantidade de
+              energia elétrica usada por equipamento específico para seu funcionamento, é informada em Watts (W) ou
+              Quilowatts (KW) nas especificações de cada eletrodoméstico. Igualmente relevante é o período de tempo em
+              que
+              os objetos consumidores de energia ficam em uso, e a tarifa aplicada àquela região e caso específico.
+              Multiplicando a potência elétrica em KW pelo período de tempo em horas se obtém o consumo de energia
+              daquele
+              aparelho durante aquele intervalo em KWh, assim facilmente aplica-se uma tarifa de 0,xx R$/KWh e chegamos
+              ao
+              valor em reais que deve ser pago por esse consumidor.
+            </p>
+          </div>
+          <div>
+            <h4>O simulador</h4>
+            <ul>
+              <li>
+                <p>
+                  São inseridos pelo usuário a potência elétrica (W), a quantidade de aparelhos referentes à potência
+                  informada, tempo aproximado de uso diário do(s) aparelho(s) em horas, e o período de dias faturados em
+                  questão. Por fim, é selecionada a empresa de fornecimento de energia da região, o sistema de cálculo
+                  funciona com os dados mais recentes encontrados de tarifas residenciais e convencionais aplicadas
+                  pelas diferentes regiões do país.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Com os dados informados o simulador converte a potência elétrica em KW, encontra o consumo mensal e
+                  aplica a tarifa correspondente à empresa selecionada, assim retorna o valor do consumo em reais.
+                </p>
+              </li>
+              <li>
+                <p>
+                  É possível utilizar o sistema para calcular o consumo total de uma residência, aplicando dados de cada
+                  um dos eletrodomésticos e salvando os retornos em uma tabela para somar o valor total da conta de
+                  energia naquele período.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section><!-- about -->
+  </div>
+  <!--container-->
+
+
+  <footer class=" container py-5">
+    <div class=" row ">
+      <div class=" col-6 col-md ">
+        <ul class=" list-unstyled text-small">
+          <li><a class=" text-muted " href="https://github.com/luizcasula/consumo-de-energia-brasil"
+              style="text-decoration:none"><img src="./public/assets/github-icon.png" id="githubIcon"> </a></li>
+          <li><small class=" d-block mb-3 text-muted ">© ADRIANO BEDIN JUNIOR</small></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+  <!-- js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+  <script src=" main.js "></script>
+  <script>
+    var form = document.querySelector('.needs-validation');
+
+    form.addEventListener('submit', function (event) {
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    })
+  </script>
+</body>
+
+</html>
